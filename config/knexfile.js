@@ -9,7 +9,11 @@ module.exports = {
       user: 'root',
       password: null,
       database: 'secangkir_ilmu'
-    }
+    },
+    pool: {
+      min: 2,
+      max: 10
+    },
   },
 
   staging: {
