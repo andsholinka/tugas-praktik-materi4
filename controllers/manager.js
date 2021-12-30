@@ -25,6 +25,9 @@ class ManagerController {
 
             if (manager.length == 0) throw new Error('Id Manager Tidak Tersedia');
 
+            const karyawan = await managerModel.getKaryawanByIdManager(req.params.id);
+            manager[0].karyawan = karyawan
+
             res.status(200).send({
                 status: res.statusCode,
                 message: 'Successfully get Manager',

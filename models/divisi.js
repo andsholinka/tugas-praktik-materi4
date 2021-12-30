@@ -9,9 +9,11 @@ class divisiModel {
     }
 
     getDivisiById(id) {
-        const divisi = db.from('divisi').select('id_divisi', 'nama_divisi', 'kategori_divisi').where({
-            deleted_at: null,
-            id_divisi: id
+        const divisi = db.select('divisi.id_divisi', 'divisi.nama_divisi', 'divisi.kategori_divisi', 'manager.nik AS nik_manager', 'manager.nama AS nama_manager').from('divisi').where({
+            'divisi.deleted_at': null,
+            'divisi.id_divisi': id
+        }).join('manager', function () {
+            this.on('divisi.id_divisi', '=', 'manager.id_divisi')
         })
         return divisi;
     }

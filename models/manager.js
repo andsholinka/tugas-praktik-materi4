@@ -4,16 +4,31 @@ const momentTz = require('moment-timezone')
 
 class ManagerModel {
     getManager() {
-        const manager = db.from('manager').select('id_manager', 'nama', 'tahun_bekerja', 'lama_bekerja', 'jenis_kelamin', 'id_divisi').where('deleted_at', null)
+        // const manager = db.from('manager').select('id_manager', 'nama', 'tahun_bekerja', 'lama_bekerja', 'jenis_kelamin', 'id_divisi').where('deleted_at', null)
+        const manager = db.from('manager').select('id_manager', 'nama').where('deleted_at', null)
         return manager;
     }
 
     getManagerById(id) {
-        const manager = db.from('manager').select('id_manager', 'nama', 'tahun_bekerja', 'lama_bekerja', 'jenis_kelamin', 'id_divisi').where({
+
+        const manager = db.select('manager.id_manager', 'manager.nik', 'manager.nama', 'manager.tahun_bekerja', 'manager.lama_bekerja', 'divisi.nama_divisi').from('manager').where({
+            'manager.deleted_at': null,
+            'manager.id_manager': id
+        }).join('divisi', function () {
+            this.on('manager.id_divisi', '=', 'divisi.id_divisi')
+        })
+
+        return manager;
+    }
+
+    getKaryawanByIdManager(id) {
+
+        const karyawan = db.from('karyawan').select('id_karyawan', 'nama', 'tahun_bekerja', 'lama_bekerja', 'jenis_kelamin').where({
             deleted_at: null,
             id_manager: id
         })
-        return manager;
+
+        return karyawan;
     }
 
     createManager(dataManager) {

@@ -4,14 +4,21 @@ const momentTz = require('moment-timezone')
 
 class karyawanModel {
     getKaryawan() {
-        const karyawan = db.from('karyawan').select('id_karyawan', 'nama', 'tahun_bekerja', 'lama_bekerja', 'jenis_kelamin', 'id_manager').where('deleted_at', null)
+        // const karyawan = db.from('karyawan').select('id_karyawan', 'nama', 'tahun_bekerja', 'lama_bekerja', 'jenis_kelamin', 'id_manager').where('deleted_at', null)
+        const karyawan = db.from('karyawan').select('id_karyawan', 'nama').where('deleted_at', null)
         return karyawan;
     }
 
     getKaryawanById(id) {
-        const karyawan = db.from('karyawan').select('id_karyawan', 'nama', 'tahun_bekerja', 'lama_bekerja', 'jenis_kelamin', 'id_manager').where({
-            deleted_at: null,
-            id_karyawan: id
+        // const karyawan = db.from('karyawan').select('id_karyawan', 'nama', 'tahun_bekerja', 'lama_bekerja', 'jenis_kelamin', 'id_manager').where({
+        //     deleted_at: null,
+        //     id_karyawan: id
+        // })
+        const karyawan = db.select('karyawan.id_karyawan', 'karyawan.nama', 'karyawan.tahun_bekerja', 'karyawan.lama_bekerja', 'karyawan.jenis_kelamin', 'manager.nama AS nama_manager').from('karyawan').where({
+            'karyawan.deleted_at': null,
+            'karyawan.id_karyawan': id
+        }).join('manager', function () {
+            this.on('karyawan.id_manager', '=', 'manager.id_manager')
         })
         return karyawan;
     }
